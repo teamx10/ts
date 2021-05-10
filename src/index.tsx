@@ -1,11 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.css';
+
+import { CssBaseline } from '@material-ui/core';
+import React from 'react';
+import { render } from 'react-dom';
+
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
-import {CssBaseline} from "@material-ui/core";
 
-ReactDOM.render(
+render(
   <React.StrictMode>
     <CssBaseline />
     <App />
