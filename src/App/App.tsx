@@ -22,26 +22,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const isArrayOfNumber = (arr: (number | string)[]): arr is number[] => {
+  return arr.every((value) => typeof value === 'number');
+};
+
 function App() {
   const classes = useStyles();
 
-  const [a, setA] = useState<string | number>('a');
-  const [b, setB] = useState<string | number>('b');
-  const [c, setC] = useState<string | number>('c');
-  const [d, setD] = useState<string | number>('d');
+  const [items, setItems] = useState<(string | number)[]>(['a', 'b', 123, 'd']);
 
-  const [all, setAll] = useState({ a, b, c, d });
+  const [all, setAll] = useState([...items]);
 
   const [sumStr, setSumStr] = useState('');
   const [sum, setSum] = useState(0);
 
   const handleSubmit = () => {
-    setAll({ a, b, c, d });
-    if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number' && typeof d === 'number') {
-      setSum(a + b + c + d);
+    setAll([...items]);
+    if (isArrayOfNumber(items)) {
+      setSum(items.reduce((acc, value) => acc + value, 0));
     } else {
-      setSumStr(`${a}${b}${c}${d}`);
+      setSumStr(items.reduce((acc: string, value) => acc + `${value}`, ''));
     }
+  };
+
+  const handleChange = (value: number | string, index: number) => {
+    const itms = [...items];
+    itms[index] = value;
+    setItems(itms);
   };
 
   return (
@@ -56,38 +63,18 @@ function App() {
       >
         <Paper className={classes.Paper}>
           <Typography variant="h4">TS Form Example</Typography>
-          <div className={classes.Item}>
-            <TextField
-              fullWidth
-              label="A"
-              value={a}
-              onChange={(e) => setA(isNaN(+e.target.value) ? e.target.value : +e.target.value)}
-            />
-          </div>
-          <div className={classes.Item}>
-            <TextField
-              fullWidth
-              label="B"
-              value={b}
-              onChange={(e) => setB(isNaN(+e.target.value) ? e.target.value : +e.target.value)}
-            />
-          </div>
-          <div className={classes.Item}>
-            <TextField
-              fullWidth
-              label="C"
-              value={c}
-              onChange={(e) => setC(isNaN(+e.target.value) ? e.target.value : +e.target.value)}
-            />
-          </div>
-          <div className={classes.Item}>
-            <TextField
-              fullWidth
-              label="D"
-              value={d}
-              onChange={(e) => setD(isNaN(+e.target.value) ? e.target.value : +e.target.value)}
-            />
-          </div>
+
+          {items.map((item, index) => (
+            <div className={classes.Item} key={index}>
+              <TextField
+                fullWidth
+                label={`${index}`}
+                value={item}
+                onChange={(e) => handleChange(isNaN(+e.target.value) ? e.target.value : +e.target.value, index)}
+              />
+            </div>
+          ))}
+
           <div className={classes.Item}>
             <Button className={classes.Button} type="submit" variant="outlined">
               Submit
