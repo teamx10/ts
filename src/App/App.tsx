@@ -1,14 +1,21 @@
 import './App.css';
 
-import { Button, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
+import { Button, IconButton, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   Button: {
-    marginBottom: theme.spacing(2),
+    margin: theme.spacing(0, 1, 2, 1),
+  },
+  DeleteButton: {
+    position: 'absolute',
+    right: 10,
+    top: 4,
   },
   Item: {
     margin: theme.spacing(2),
+    position: 'relative',
   },
   Paper: {
     justifyContent: 'center',
@@ -51,6 +58,16 @@ function App() {
     setItems(itms);
   };
 
+  const handleAdd = () => {
+    setItems([...items, '']);
+  };
+
+  const handleRemove = (index: number) => {
+    const itms = [...items];
+    itms.splice(index, 1);
+    setItems(itms);
+  };
+
   return (
     <div className="App">
       <form
@@ -72,11 +89,22 @@ function App() {
                 value={item}
                 onChange={(e) => handleChange(isNaN(+e.target.value) ? e.target.value : +e.target.value, index)}
               />
+              <IconButton
+                aria-label="delete"
+                className={classes.DeleteButton}
+                size="small"
+                onClick={() => handleRemove(index)}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
             </div>
           ))}
 
           <div className={classes.Item}>
-            <Button className={classes.Button} type="submit" variant="outlined">
+            <Button className={classes.Button} variant="outlined" onClick={handleAdd}>
+              Add
+            </Button>
+            <Button className={classes.Button} color="primary" type="submit" variant="outlined">
               Submit
             </Button>
           </div>
