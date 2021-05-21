@@ -1,42 +1,17 @@
 import './App.css';
 
-import { Button, IconButton, makeStyles, Paper, TextField, Typography } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Paper } from '@material-ui/core';
 import React, { useState } from 'react';
 
-const useStyles = makeStyles((theme) => ({
-  Button: {
-    margin: theme.spacing(0, 1, 2, 1),
-  },
-  DeleteButton: {
-    position: 'absolute',
-    right: 10,
-    top: 4,
-  },
-  Item: {
-    margin: theme.spacing(2),
-    position: 'relative',
-  },
-  Paper: {
-    justifyContent: 'center',
-    margin: `${theme.spacing(2)}px auto`,
-    width: theme.spacing(50),
-  },
-  PaperAll: {
-    margin: '20px auto',
-    textAlign: 'left',
-    width: theme.spacing(50),
-  },
-}));
-
-const isArrayOfNumber = (arr: (number | string)[]): arr is number[] => {
-  return arr.every((value) => typeof value === 'number');
-};
+import { useAppStyles } from './App.styles';
+import { ItemsForm } from './Components/ItemsForm/ItemsForm';
+import { Item } from './Interfaces/Items';
+import { isArrayOfNumber } from './Utils/arrays';
 
 function App() {
-  const classes = useStyles();
+  const classes = useAppStyles();
 
-  const [items, setItems] = useState<(string | number)[]>(['a', 'b', 123, 'd']);
+  const [items, setItems] = useState<Item[]>(['a', 'b', 123, 'd']);
 
   const [all, setAll] = useState([...items]);
 
@@ -52,7 +27,7 @@ function App() {
     }
   };
 
-  const handleChange = (value: number | string, index: number) => {
+  const handleChange = (value: Item, index: number) => {
     const itms = [...items];
     itms[index] = value;
     setItems(itms);
@@ -70,47 +45,14 @@ function App() {
 
   return (
     <div className="App">
-      <form
-        autoComplete="off"
-        noValidate
-        onSubmit={(event) => {
-          event.preventDefault();
-          handleSubmit();
-        }}
-      >
-        <Paper className={classes.Paper}>
-          <Typography variant="h4">TS Form Example</Typography>
-
-          {items.map((item, index) => (
-            <div className={classes.Item} key={index}>
-              <TextField
-                fullWidth
-                label={`${index}`}
-                value={item}
-                onChange={(e) => handleChange(isNaN(+e.target.value) ? e.target.value : +e.target.value, index)}
-              />
-              <IconButton
-                aria-label="delete"
-                className={classes.DeleteButton}
-                size="small"
-                onClick={() => handleRemove(index)}
-              >
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </div>
-          ))}
-
-          <div className={classes.Item}>
-            <Button className={classes.Button} variant="outlined" onClick={handleAdd}>
-              Add
-            </Button>
-            <Button className={classes.Button} color="primary" type="submit" variant="outlined">
-              Submit
-            </Button>
-          </div>
-        </Paper>
-      </form>
       <Paper className={classes.PaperAll}>
+        <ItemsForm
+          handleAdd={handleAdd}
+          handleChange={handleChange}
+          handleRemove={handleRemove}
+          handleSubmit={handleSubmit}
+          items={items}
+        />
         <pre>{JSON.stringify(all, null, 2)}</pre>
         <hr />
         {sumStr}
