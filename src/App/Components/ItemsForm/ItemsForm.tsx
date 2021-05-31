@@ -1,9 +1,9 @@
-import { Button, IconButton, Paper, TextField, Typography } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Button, Paper, Typography } from '@material-ui/core';
 import React from 'react';
 
 import { useAppStyles } from '../../App.styles';
 import { Item } from '../../Interfaces/Items';
+import { ItemsList } from '../ItemsList';
 
 interface Props {
   handleAdd: () => void;
@@ -27,24 +27,7 @@ export const ItemsForm: React.FC<Props> = ({ handleSubmit, items, handleRemove, 
       <Paper className={classes.Paper}>
         <Typography variant="h4">TS Form Example</Typography>
 
-        {items.map((item, index) => (
-          <div className={classes.Item} key={index}>
-            <TextField
-              fullWidth
-              label={`${index}`}
-              value={item}
-              onChange={(e) => handleChange(isNaN(+e.target.value) ? e.target.value : +e.target.value, index)}
-            />
-            <IconButton
-              aria-label="delete"
-              className={classes.DeleteButton}
-              size="small"
-              onClick={() => handleRemove(index)}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </div>
-        ))}
+        <ItemsList handleChange={handleChange} handleRemove={handleRemove} items={items} />
 
         <div className={classes.Item}>
           <Button className={classes.Button} variant="outlined" onClick={handleAdd}>

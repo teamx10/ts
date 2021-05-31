@@ -4,7 +4,8 @@ import { Paper } from '@material-ui/core';
 import React, { useState } from 'react';
 
 import { useAppStyles } from './App.styles';
-import { ItemsForm } from './Components/ItemsForm/ItemsForm';
+import { ItemsForm } from './Components/ItemsForm';
+import { Summary } from './Components/Summary';
 import { Item } from './Interfaces/Items';
 import { isArrayOfNumber } from './Utils/arrays';
 
@@ -53,11 +54,7 @@ function App() {
           handleSubmit={handleSubmit}
           items={items}
         />
-        <pre>{JSON.stringify(all, null, 2)}</pre>
-        <hr />
-        {sumStr}
-        <hr />
-        {sum}
+        <Summary items={all} sumNumber={sum} sumString={sumStr} />
       </Paper>
     </div>
   );
